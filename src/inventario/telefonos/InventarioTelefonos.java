@@ -20,12 +20,11 @@ public class InventarioTelefonos {
         File file = new File(ruta);
 
         do {
-            opcion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de su opcion a elegir\n1 - Ver inventario"
-                    + "\n2 - Agregar telefono\n3 - Vender telefono\n4 - Ver caja"));
             try {
                 String linea, salida = "Marca\tPrecio\tStock\n";
                 FileReader readerf = new FileReader(file);
-                try (BufferedReader readerb = new BufferedReader(readerf)) {
+                try {
+                    BufferedReader readerb = new BufferedReader(readerf);
                     int temp = 0;
                     while ((linea = readerb.readLine()) != null) {
                         String lineas[] = linea.split("-");
@@ -37,12 +36,14 @@ public class InventarioTelefonos {
                         salida += "\n";
                     }
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + ex);
+                    JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + ex.getMessage());
                 }
                 pantalla.setText(salida);
             } catch (HeadlessException | IOException ex) {
-                JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + ex);
+                JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + ex.getMessage());
             }
+            opcion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de su opcion a elegir\n1 - Ver inventario general"
+                    + "\n2 - Agregar telefono a inventario\n3 - Vender telefono\n4 - Ver caja general"));
 
             switch (opcion) {
                 case 1:
