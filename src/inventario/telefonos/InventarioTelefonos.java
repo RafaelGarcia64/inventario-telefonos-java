@@ -44,7 +44,7 @@ public class InventarioTelefonos {
 
             //Menu principal del programa
             opcion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de su opcion a elegir\n1 - Ver inventario general"
-                    + "\n2 - Agregar telefono a inventario\n3 - Vender telefono\n4 - Ver caja general"));
+                    + "\n2 - Agregar telefono a inventario\n3 - Vender telefono\nOtro numero para salir"));
             switch (opcion) {
                 case 1:
                     JOptionPane.showMessageDialog(null, pantalla);
@@ -65,7 +65,7 @@ public class InventarioTelefonos {
                                 posicion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la posicion del telefono para cambiar su stock"));
                             } while (posicion < 1 || posicion > filaMatriz);
                             do {
-                                precio = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el nuveo stock del telefono Marca: " + inventario[posicion - 1][0]));
+                                precio = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el nuveo numero de stock del telefono Marca: " + inventario[posicion - 1][0]));
                             } while (precio <= 0);
                             inventario[posicion - 1][2] = "" + precio;
                             break;
@@ -102,20 +102,42 @@ public class InventarioTelefonos {
                         JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + e.getMessage());
                     }
                     break;
-
                 case 3:
-
-                    break;
-                case 4:
-
+                    //Vender telefono
+                    //Validar si existe registro de telefonos para evitar bucle infinito
+                    if (filaMatriz > 0) {
+                        int posicion;
+                        //Validar seleccion correcta de telefono
+                        do {
+                            posicion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la posicion del telefono a comprar"));
+                        } while (posicion < 1 || posicion > filaMatriz);
+                        //Validar si se posee stock del telefono seleccionado para evitar stock negativo
+                        if (Integer.parseInt(inventario[posicion - 1][2]) > 0) {
+                            inventario[posicion - 1][2] = (Integer.parseInt(inventario[posicion - 1][2]) - 1) + "";
+                            try {
+                                BufferedWriter writterb = new BufferedWriter(new FileWriter(ruta));
+                                writterb.write("");
+                                for (int i = 0; i < filaMatriz; i++) {
+                                    writterb.write(inventario[i][0] + "-" + inventario[i][1] + "-" + inventario[i][2]);
+                                    writterb.newLine();
+                                }
+                                writterb.close();
+                            } catch (IOException | HeadlessException e) {
+                                JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + e.getMessage());
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "El telefono seleccionado no cuenta con stock por el momento");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se encuentran registros de inventario");
+                    }
                     break;
                 default:
                     //Saludo de despedida para indicar en donde se guarda el documento de texto
                     JOptionPane.showMessageDialog(null, "Saliendo del programa de inventarios\nSu informacion esta a salvo en un archivo de texto en la siguiente direccion:\n"
                             + ruta);
             }
-
-        } while (opcion >= 1 && opcion <= 4);
+        } while (opcion >= 1 && opcion <= 3);
 
     }
 
