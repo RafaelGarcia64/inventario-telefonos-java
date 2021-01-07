@@ -38,6 +38,7 @@ public class InventarioTelefonos {
                     salida += "\n";
                 }
                 pantalla.setText(salida);
+                readerb.close();
             } catch (IOException | HeadlessException ex) {
                 JOptionPane.showMessageDialog(null, "Se ha producido un error\nDescripcion del error:\n" + ex.getMessage());
             }
